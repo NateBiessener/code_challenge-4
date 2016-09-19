@@ -37,4 +37,23 @@ app.get('/treats', urlencodedParser, function(req, res){
   });
 });//end /treats get
 
+/*receives {
+  name: --,
+  description: --,
+  url:
+}*/
+app.post('/treats', urlencodedParser, function(req, res){
+  console.log('in /treats post');
+  pg.connect(connectionString, function(err, client, done){
+    if (err) {
+      console.log(err);
+    }
+    else {
+      client.query('INSERT INTO treat (name, description, pic) VALUES ($1, $2, $3)', [req.body.name, req.body.description, req.body.url]);
+      done();
+      res.send(true);
+    }
+  });
+});
+
 app.use(express.static('public'));
